@@ -1,0 +1,41 @@
+name: 唔姆签到
+
+on:
+  schedule:
+    # 每天 00:30 UTC = 北京时间 08:30（可自行调整）
+    - cron: '30 0 * * *'
+  workflow_dispatch:  # 支持手动触发
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run sign
+        env:
+          WUMU_TOKEN: ${{ secrets.WUMU_TOKEN }}
+          WUMU_DOUBLE: ${{ secrets.WUMU_DOUBLE }}
+        run: |
+          python3 wumu_sign.py
+
+      # 失败时通过 Telegram 通知（可选，需在仓库 Secrets 中配置）
+      # - name: Notify on failure
+      #   if: failure()
+      #   uses: appleboy/telegram-action@master
+      #   with:
+      #     to: ${{ secrets.TELEGRAM_TO }}
+      #     token: ${{ secrets.TELEGRAM_TOKEN }}
+      #     message: "唔姆签到失败，请检查日志。"

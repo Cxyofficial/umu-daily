@@ -1,2 +1,4 @@
-requests
-json
+# 本脚本仅使用 Python 标准库，无第三方依赖。
+# 无需执行 pip install -r requirements.txt 即可直接运行。
+# 如果未来需要扩展（如 requests 等），可在此处添加，例如：
+# requests>=2.28.0
