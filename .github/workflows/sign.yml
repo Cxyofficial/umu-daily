@@ -29,13 +29,9 @@ jobs:
           WUMU_TOKEN: ${{ secrets.WUMU_TOKEN }}
           WUMU_DOUBLE: ${{ secrets.WUMU_DOUBLE }}
         run: |
+          if [ -z "$WUMU_TOKEN" ]; then
+            echo "未配置 WUMU_TOKEN secret，跳过签到。"
+            echo "如需启用自动签到，请在仓库 Settings → Secrets and variables → Actions 中添加 WUMU_TOKEN。"
+            exit 0
+          fi
           python3 wumu_sign.py
-
-      # 失败时通过 Telegram 通知（可选，需在仓库 Secrets 中配置）
-      # - name: Notify on failure
-      #   if: failure()
-      #   uses: appleboy/telegram-action@master
-      #   with:
-      #     to: ${{ secrets.TELEGRAM_TO }}
-      #     token: ${{ secrets.TELEGRAM_TOKEN }}
-      #     message: "唔姆签到失败，请检查日志。"
