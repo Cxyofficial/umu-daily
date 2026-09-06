@@ -1,40 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-唔姆 (com.umu168.wumu) 自动签到脚本
-====================================
-根据抓包(HAR)分析得出：
-  签到接口 : POST https://api3.umu168.com/sign/sign
-  签到状态 : GET  https://api3.umu168.com/sign/getSignDays
-  用户信息 : GET  https://api3.umu168.com/user/info
-
-鉴权方式：
-  请求头需要三个关键字段：
-    authorization : 用户 token（Base64，解码后为 "<毫秒时间戳>_<用户ID>"）
-    app           : 固定应用标识 97c0bf46-d8c1-4b4f-93ab-526971f1bf47
-    teenager      : no
-
-使用方法（命令行）：
-  1. 编辑本文件顶部的 TOKEN（在 App 抓包中获取 authorization 的值）
-  2. 运行：
-       python3 wumu_sign.py
-     或直接传 token：
-       python3 wumu_sign.py --token "MTc4ODYz..."
-  3. 可选参数：
-       --double  双倍签到，请求体 {"isDouble":1}（默认普通签到 isDouble=0）
-
-使用方法（青龙面板）：
-  1. 新建脚本，粘贴本文件内容
-  2. 在「环境变量」中添加：
-       名称: WUMU_TOKEN    值: 你的 authorization token
-     可选：
-       名称: WUMU_DOUBLE   值: true（启用双倍签到，默认关闭）
-  3. 任务命令：
-       task wumu_sign.py
-  4. 如需通知，青龙面板会自动注入 notify 模块，脚本会尝试调用。
-
-依赖：仅用标准库，无需 pip 安装。
-"""
 
 import argparse
 import base64
@@ -71,7 +36,7 @@ except ImportError:
 
 
 def http_request(path, method="GET", body=None, token=None, timeout=15):
-    """发送请求并返回解析后的 JSON。"""
+    """发送请求并返回解析后的 JSON"""
     url = BASE_URL + path
     headers = dict(HEADERS)
     headers["authorization"] = token
